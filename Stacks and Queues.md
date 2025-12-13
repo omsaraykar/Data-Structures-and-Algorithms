@@ -160,7 +160,60 @@ class myStack {
 ---
 ### Q4. Implement Queue using Linkedlist
 ```java
+class Node {
+    int data;
+    Node next;
 
+    Node(int new_data) {
+        data = new_data;
+        next = null;
+    }
+}
+
+class myQueue {
+    Node head;
+    Node tail;
+    int size;
+
+    public myQueue() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public void enqueue(int x) {
+        if (isEmpty()) {
+            Node temp = new Node(x);
+            head = temp;
+            tail = temp;
+            size = 1;
+            return;
+        }
+        Node temp = new Node(x);
+        tail.next = temp;
+        tail = tail.next;
+        size++;
+    }
+
+    public void dequeue() {
+        if (isEmpty()) return;
+        head = head.next;
+        size--;
+    }
+
+    public int getFront() {
+        if (isEmpty()) return -1;
+        return head.data;
+    }
+
+    public int size() {
+        return this.size;
+    }
+}
 ```
 ---
 ### Q5. Implement Stack using Queue
