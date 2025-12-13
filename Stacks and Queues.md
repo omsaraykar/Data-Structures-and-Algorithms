@@ -44,7 +44,69 @@ class myStack {
 ---
 ### Q2. Implement Queue Using Array
 ```java
+class myQueue {
+    int[] q;
+    int start;
+    int end;
+    int size;
+    
+    public myQueue(int n) {
+        q = new int[n];
+        start = -1;
+        end = -1;
+        size = 0;
+    }
 
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == q.length;
+    }
+
+    public void enqueue(int x) {
+        if (isFull()) {
+            return;
+        } else if (isEmpty()) {
+            start = 0;
+            end = 0;
+            q[end] = x;
+            size++;
+            return;
+        }
+        q[++end] = x;
+        size++;
+    }
+
+    public void dequeue() {
+        if (isEmpty()) {
+            return;
+        } else if (size == 1) {
+            q[start] = 0;
+            start = -1;
+            end = -1;
+            size = 0;
+            return;
+        }
+        q[start++] = 0;
+        size--;
+    }
+
+    public int getFront() {
+        if(isEmpty()) {
+            return -1;
+        }
+        return q[start];
+    }
+
+    public int getRear() {
+        if (isEmpty()) {
+            return -1;
+        }
+        return q[end];
+    }
+}
 ```
 ---
 ### Q3. Implement Stack using Linkedlist
