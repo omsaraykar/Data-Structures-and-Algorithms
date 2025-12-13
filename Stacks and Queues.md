@@ -109,7 +109,7 @@ class myQueue {
 }
 ```
 ---
-### Q3. Implement Stack using Linkedlist
+### Q3. Implement Stack using Linked list
 ```java
 class Node {
     int data;
@@ -158,7 +158,7 @@ class myStack {
 }
 ```
 ---
-### Q4. Implement Queue using Linkedlist
+### Q4. Implement Queue using Linked list
 ```java
 class Node {
     int data;
@@ -223,6 +223,57 @@ class myQueue {
 ---
 ### Q6. Implement Queue using Stack
 ```java
+class MyQueue {
+    Stack<Integer> st1;
+    Stack<Integer> st2;
+    int size;
 
+    public MyQueue() {
+        st1 = new Stack<>();
+        st2 = new Stack<>();
+        size = 0;
+    }
+    
+    public void push(int x) {
+        if (empty()) {
+            st1.push(x);
+            size++;
+            return;
+        }
+
+        while (!st2.isEmpty()) {
+            st1.push(st2.pop());
+        }
+        st1.push(x);
+        size++;
+    }
+    
+    public int pop() {
+        if (empty()) {
+            return -1;
+        }
+
+        while (!st1.isEmpty()) {
+            st2.push(st1.pop());
+        }
+        size--;
+        return st2.pop();
+    }
+    
+    public int peek() {
+        if (empty()) {
+            return -1;
+        }
+
+        while (!st1.isEmpty()) {
+            st2.push(st1.pop());
+        }
+        return st2.peek();
+    }
+    
+    public boolean empty() {
+        return size == 0;
+    }
+}
 ```
 ---
