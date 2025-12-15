@@ -69,3 +69,96 @@ class Solution {
 }
 ```
 ---
+**Q3] Connected Components**
+M1: BFS
+```java
+class Solution {
+    static void bfs(ArrayList<ArrayList<Integer>> adj, int src, boolean[] visited, ArrayList<Integer> res) {
+        Queue<Integer> q = new LinkedList<>();
+        visited[src] = true;
+        q.add(src);
+
+        while (!q.isEmpty()) {
+            int curr = q.poll();
+            res.add(curr);
+
+            // visit all the unvisited neighbours
+            for (int x : adj.get(curr)) {
+                if (!visited[x]) {
+                    visited[x] = true;
+                    q.add(x);
+                }
+            }
+        }
+    }
+    public ArrayList<ArrayList<Integer>> getComponents(int V, int[][] edges) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        for (int[] edge: edges) {
+            int a = edge[0];
+            int b = edge[1];
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+        }
+        
+        
+        boolean[] visited = new boolean[V];
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                ArrayList<Integer> component = new ArrayList<>();
+                bfs(adj, i, visited, component);
+                res.add(component);
+            }
+        }
+        return res;
+    }
+}
+```
+M2: DFS
+```java
+class Solution {
+    private void dfs(ArrayList<ArrayList<Integer>> adj, int src, boolean[] visited, ArrayList<Integer> res) {
+        int V = adj.size();
+        visited[src] = true;
+        res.add(src);
+
+        for (int x: adj.get(src)) {
+            if (!visited[x]) {
+                dfs(adj, x, visited, res);
+            }
+        }
+    }
+    public ArrayList<ArrayList<Integer>> getComponents(int V, int[][] edges) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        for (int[] edge: edges) {
+            int a = edge[0];
+            int b = edge[1];
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+        }
+        
+        
+        boolean[] visited = new boolean[V];
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                ArrayList<Integer> component = new ArrayList<>();
+                dfs(adj, i, visited, component);
+                res.add(component);
+            }
+        }
+        return res;
+    }
+}
+```
+---
