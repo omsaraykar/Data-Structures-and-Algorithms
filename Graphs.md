@@ -1,10 +1,10 @@
-### Introduction
+## Introduction
 A graph is a non-linear data structure consisting of nodes that have data and are connected to other nodes through edges.
 **There are 2 types of graphs:**
 1. Undirected Graphs
 2. Directed Graphs
 ---
-### Some Terminologies
+## Some Terminologies
 1. **Node:** Nodes are circles represented by numbers. Nodes are also referred to as vertices. They store the data.
 2. **Edge:** Two nodes are connected by a horizontal line called ****Edge. Edge can be directed or undirected.
 3. **Path:** The path contains a lot of nodes and each of them is reachable.
@@ -12,8 +12,9 @@ A graph is a non-linear data structure consisting of nodes that have data and ar
    `In undirected graphs ⇒ Total degree = 2 x edges`
 5. **Edge Weight:** A graph may have weights assigned on its edges. It is often referred to as the cost of the edge.
 ---
-### Questions
-**Q1] BFS (Breadth First Search)** 
+## Questions
+### Q1] BFS (Breadth First Search) 
+
 ```java
 class Solution {
     public ArrayList<Integer> bfs(ArrayList<ArrayList<Integer>> adj) {
@@ -44,7 +45,8 @@ class Solution {
 }
 ```
 ---
-**Q2] DFS (Depth First Search)**
+### Q2] DFS (Depth First Search)
+
 ```java
 class Solution {
     private void dfsRec(int node, ArrayList<ArrayList<Integer>> adj, boolean[] vis, ArrayList<Integer> res) {
@@ -69,8 +71,9 @@ class Solution {
 }
 ```
 ---
-**Q3] Connected Components**
-M1: BFS
+### Q3] Connected Components
+
+**M1: BFS**
 ```java
 class Solution {
     static void bfs(ArrayList<ArrayList<Integer>> adj, int src, boolean[] visited, ArrayList<Integer> res) {
@@ -119,7 +122,8 @@ class Solution {
     }
 }
 ```
-M2: DFS
+
+**M2: DFS**
 ```java
 class Solution {
     private void dfs(ArrayList<ArrayList<Integer>> adj, int src, boolean[] visited, ArrayList<Integer> res) {
@@ -158,6 +162,125 @@ class Solution {
             }
         }
         return res;
+    }
+}
+```
+
+**M3: DSU**
+```java
+
+```
+---
+### Q4] Complete Components
+
+**M1: BFS**
+```java
+class Solution {
+    private int[] bfs(ArrayList<ArrayList<Integer>> adj, int src, boolean[] visited) {
+        Queue<Integer> q = new LinkedList<>();
+        visited[src] = true;
+        q.add(src);
+
+        int nodes = 0;
+        int degree = 0;
+
+        while (!q.isEmpty()) {
+            int curr = q.poll();
+            nodes++;
+            degree += adj.get(curr).size();
+
+            // visit all the unvisited neighbours
+            for (int x : adj.get(curr)) {
+                if (!visited[x]) {
+                    visited[x] = true;
+                    q.add(x);
+                }
+            }
+        }
+
+        return new int[] {nodes, degree};
+    }
+    public int countCompleteComponents(int n, int[][] edges) {
+        // make adj list
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] edge: edges) {
+            int a = edge[0];
+            int b = edge[1];
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+        }
+        
+        boolean[] visited = new boolean[n];
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                int[] res = bfs(adj, i, visited);
+                int v = res[0];
+                int e = res[1] / 2;
+
+                if (e == v * (v - 1) / 2) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
+```
+
+**M2: DFS**
+```java
+class Solution {
+
+    private int nodes;
+    private int edges;
+
+    private void dfs(int node, ArrayList<ArrayList<Integer>> adj, boolean[] visited) {
+        visited[node] = true;
+        nodes++;
+        edges += adj.get(node).size();
+
+        for (int x : adj.get(node)) {
+            if (!visited[x]) {
+                dfs(x, adj, visited);
+            }
+        }
+    }
+
+    public int countCompleteComponents(int n, int[][] edgesArr) {
+        // build adjacency list
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] edge : edgesArr) {
+            int a = edge[0];
+            int b = edge[1];
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+        }
+
+        boolean[] visited = new boolean[n];
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                nodes = 0;
+                edges = 0;
+
+                dfs(i, adj, visited);
+
+                int actualEdges = edges / 2;
+
+                if (actualEdges == nodes * (nodes - 1) / 2) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 }
 ```
