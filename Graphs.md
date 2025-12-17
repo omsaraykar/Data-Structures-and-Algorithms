@@ -6,7 +6,7 @@ A graph is a non-linear data structure consisting of nodes that have data and ar
 ---
 ## Some Terminologies
 1. **Node:** Nodes are circles represented by numbers. Nodes are also referred to as vertices. They store the data.
-2. **Edge:** Two nodes are connected by a horizontal line called ****Edge. Edge can be directed or undirected.
+2. **Edge:** Two nodes are connected by a horizontal line called an Edge. Edge can be directed or undirected.
 3. **Path:** The path contains a lot of nodes and each of them is reachable.
 4. **Degree:** It is the number of edges that go inside or outside that node.
    `In undirected graphs ⇒ Total degree = 2 x edges`
@@ -14,7 +14,6 @@ A graph is a non-linear data structure consisting of nodes that have data and ar
 ---
 ## Questions
 ### Q1] BFS (Breadth First Search) 
-
 ```java
 class Solution {
     public ArrayList<Integer> bfs(ArrayList<ArrayList<Integer>> adj) {
@@ -46,7 +45,6 @@ class Solution {
 ```
 ---
 ### Q2] DFS (Depth First Search)
-
 ```java
 class Solution {
     private void dfsRec(int node, ArrayList<ArrayList<Integer>> adj, boolean[] vis, ArrayList<Integer> res) {
@@ -72,7 +70,6 @@ class Solution {
 ```
 ---
 ### Q3] Connected Components
-
 **M1: BFS**
 ```java
 class Solution {
@@ -122,7 +119,6 @@ class Solution {
     }
 }
 ```
-
 **M2: DFS**
 ```java
 class Solution {
@@ -165,14 +161,12 @@ class Solution {
     }
 }
 ```
-
 **M3: DSU**
 ```java
 
 ```
 ---
 ### Q4] Complete Components
-
 **M1: BFS**
 ```java
 class Solution {
@@ -230,7 +224,6 @@ class Solution {
     }
 }
 ```
-
 **M2: DFS**
 ```java
 class Solution {
@@ -280,6 +273,76 @@ class Solution {
                 }
             }
         }
+        return count;
+    }
+}
+```
+---
+### Q5] Number of Provinces
+**M1: BFS**
+```java
+class Solution {
+    private void bfs (int src, int[][] adj, boolean[] visited) {
+        int V = adj.length;
+        Queue<Integer> q = new LinkedList<>();
+        
+        visited[src] = true;
+        q.add(src);
+				
+        while (!q.isEmpty()) {
+            int curr = q.poll();
+
+            // visit all the unvisited neighbours
+            for (int i = 0; i < V; i++) {
+                if (!visited[i] && adj[curr][i] == 1) {
+                    visited[i] = true;
+                    q.add(i);
+                }
+            }
+        }
+    }
+    public int findCircleNum(int[][] isConnected) {
+        int V = isConnected.length;
+        boolean[] visited = new boolean[V];
+        
+        int count = 0;
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                bfs (i, isConnected, visited);
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
+```
+**M2: DFS**
+```java
+class Solution {
+    private void dfs (int src, int[][] adj, boolean[] visited) {
+        int V = adj.length;
+        visited[src] = true;
+
+        for (int i = 0; i < V; i++) {
+            if (!visited[i] && adj[src][i] == 1) {
+                dfs(i, adj, visited);
+            }
+        }
+    }
+
+    public int findCircleNum(int[][] isConnected) {
+        int V = isConnected.length;
+        boolean[] visited = new boolean[V];
+        
+        int count = 0;
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfs(i, isConnected, visited);
+                count++;
+            }
+        }
+
         return count;
     }
 }
