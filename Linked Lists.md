@@ -1,6 +1,23 @@
 ## Questions
-### Q1] Reverse a Linked List
-**M1: Iterative (3 pointers)** `TC: O(n), SC: O(1)`
+### Q1] Middle of the Linked List
+**`TC: O(n), SC: O(1)`**
+```java
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+}
+```
+### Q2] Reverse a Linked List
+**M1: Iterative (3 pointers)** **`TC: O(n), SC: O(1)`**
 ```java
 class Solution {
     public ListNode reverseList(ListNode head) {
@@ -21,7 +38,7 @@ class Solution {
     }
 }
 ```
-**M2: Recursive** `TC: O(n), SC: O(n)`
+**M2: Recursive** **`TC: O(n), SC: O(n)`**
 ```java
 class Solution {
     public ListNode reverseList(ListNode head) {
