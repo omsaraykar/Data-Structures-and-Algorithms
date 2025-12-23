@@ -72,3 +72,32 @@ public class Solution {
     }
 }
 ```
+### Q4] Find First Node of Loop in Linked List
+**Using Floyd's Cycle-Finding Algorithm** **`TC: O(n), SC: O(1)`**
+```java
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) return null;
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) break;
+        }
+
+        if (slow == fast) {
+            slow = head;
+            while (slow != fast) {
+                slow = slow.next;
+                fast = fast.next;
+            }
+            return slow;
+        }
+
+        return null;
+    }
+}
+```
