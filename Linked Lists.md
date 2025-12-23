@@ -101,3 +101,31 @@ public class Solution {
     }
 }
 ```
+### Q5] Find length of Loop
+**Using Floyd's Cycle-Finding Algorithm** **`TC: O(n), SC: O(1)`**
+```java
+class Solution {
+    public int lengthOfLoop(Node head) {
+        if (head == null || head.next == null) return 0;
+
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) break;
+        }
+        
+        int len = 0;
+        if (slow == fast) {
+            do {
+                slow = slow.next;
+                len++;
+            } while (slow != fast);
+        } 
+
+        return len;
+    }
+}
+```
