@@ -130,7 +130,7 @@ class Solution {
 }
 ```
 ### Q6] Palindrome Linked List
-**Reversing the second half of the linked list**
+**Reversing the second half of the linked list** **`TC: O(n), SC: O(1)`**
 ```java
 class Solution {
     public boolean isPalindrome(ListNode head) {
@@ -158,6 +158,29 @@ class Solution {
         head.next.next = head;
         head.next = null;
         return rev;
+    }
+}
+```
+### Q7] Odd Even Linked List
+```java
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null) return null;
+
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode evenHead = even;
+
+        while (even != null && even.next != null) {
+            odd.next = even.next;
+            odd = odd.next;
+            
+            even.next = odd.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+
+        return head;
     }
 }
 ```
