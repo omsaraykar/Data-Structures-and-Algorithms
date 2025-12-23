@@ -129,3 +129,35 @@ class Solution {
     }
 }
 ```
+### Q6] Palindrome Linked List
+**Reversing the second half of the linked list**
+```java
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast.next != null && fast.next.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        ListNode mid = reverseList(slow.next);
+        while(mid != null){
+            if(head.val != mid.val) return false;
+            mid = mid.next;
+            head = head.next;
+        }
+
+        return true;
+    }
+
+    private ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode rev = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return rev;
+    }
+}
+```
