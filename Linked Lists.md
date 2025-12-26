@@ -447,7 +447,7 @@ class Solution {
 }
 ```
 ---
-### Remove Duplicates from a Sorted DLL
+### Q17] Remove Duplicates from a Sorted DLL
 ```java
 class Solution {
     Node removeDuplicates(Node head) {
@@ -467,5 +467,33 @@ class Solution {
         return head;
     }
 }
+```
+---
+### Q18] Rotate List
+```java
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) return head;
+
+        int length = 1;
+        ListNode b = head;
+        while (b.next != null) {
+            length++;
+            b = b.next;
+        }
+        k = k % length;
+        if (k == 0) return head;
+
+        ListNode a = head;
+        for (int i = 0; i < length - k - 1; i++) {
+            a = a.next;
+        }
+        
+        ListNode newHead = a.next;
+        a.next = null;
+        b.next = head;
+
+        return newHead;
+    }
 ```
 ---
