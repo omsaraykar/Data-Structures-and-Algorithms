@@ -16,6 +16,7 @@ class Solution {
     }
 }
 ```
+---
 ### Q2] Reverse a Linked List
 **M1: Iterative (3 pointers)** **`TC: O(n), SC: O(1)`**
 ```java
@@ -52,6 +53,7 @@ class Solution {
     }
 }
 ```
+---
 ### Q3] Detect a cycle in Linked List
 **Using Floyd's Cycle-Finding Algorithm** **`TC: O(n), SC: O(1)`**
 ```java
@@ -72,6 +74,7 @@ public class Solution {
     }
 }
 ```
+---
 ### Q4] Find First Node of Loop in Linked List
 **Using Floyd's Cycle-Finding Algorithm** **`TC: O(n), SC: O(1)`**
 ```java
@@ -101,6 +104,7 @@ public class Solution {
     }
 }
 ```
+---
 ### Q5] Find length of Loop
 **Using Floyd's Cycle-Finding Algorithm** **`TC: O(n), SC: O(1)`**
 ```java
@@ -129,6 +133,7 @@ class Solution {
     }
 }
 ```
+---
 ### Q6] Palindrome Linked List
 **Reversing the second half of the linked list** **`TC: O(n), SC: O(1)`**
 ```java
@@ -161,6 +166,7 @@ class Solution {
     }
 }
 ```
+---
 ### Q7] Odd Even Linked List
 ```java
 class Solution {
@@ -184,3 +190,260 @@ class Solution {
     }
 }
 ```
+---
+### Q8] Remove Nth Node from the Linked List
+**Using two pointers**
+```java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode slow = head;
+        ListNode fast = head;
+
+        for (int i = 1; i <= n; i++) {
+            fast = fast.next;
+        }
+        if (fast == null) return head.next;
+
+        while (fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        slow.next = slow.next.next;
+
+        return head;
+    }
+}
+```
+---
+### Q9] Remove Middle Node from Linked List
+> [!INFO]
+> Keep prev to make life easy
+```java
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = null;
+
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        prev.next = slow.next;
+
+        return head;
+    }
+}
+
+```
+---
+### Q10] Insertion Point of two Linked Lists
+```java
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode a = headA;
+        ListNode b = headB;
+
+        int lenA = 0;
+        while (a != null) {
+            lenA++;
+            a = a.next;
+        }
+
+        int lenB = 0;
+        while (b != null) {
+            lenB++;
+            b = b.next;
+        }
+
+        int diff = Math.abs(lenA - lenB);
+        a = headA;
+        b = headB;
+        if (lenA > lenB) {
+            for (int i = 0; i < diff; i++) {
+                a = a.next;
+            }
+        } else {
+            for (int i = 0; i < diff; i++) {
+                b = b.next;
+            }
+        }
+
+        while (a != b) {
+            a = a.next;
+            b = b.next;
+        }
+
+        return a;
+    }
+}
+```
+---
+### Q11] Sort Linked List of 0's, 1's and 2's
+**M: Count the number of 0's, 1's and 2's**
+```java
+class Solution {
+    public Node segregate(Node head) {
+        Node temp = head;
+        
+        int zeros = 0;
+        int ones = 0;
+        int twos = 0;
+        
+        while (temp != null) {
+            if (temp.data == 0) zeros++;
+            else if (temp.data == 1) ones++;
+            else twos++;
+            temp = temp.next;
+        }
+        
+        temp = head;
+        while (temp != null) {
+            if (zeros != 0) {
+                temp.data = 0;
+                zeros--;
+            }
+            else if (ones != 0) {
+                temp.data = 1;
+                ones--;
+            }
+            else {
+                temp.data = 2;
+                twos--;
+            }
+            temp = temp.next;
+        }
+        
+        return head;
+    }
+}
+```
+---
+### Q12] Sort Linked List
+
+---
+### Q13] Add 1 to a Linked List Number
+**M: Using Recursion**
+```java
+class Solution {
+    public Node addOne(Node head) {
+        int digit = addWithCarry(head);
+
+        if (digit > 0) {
+            Node newNode = new Node(digit);
+            newNode.next = head;
+            return newNode;
+        }
+
+        return head;
+    }
+    
+    private int addWithCarry(Node head) {
+        if (head == null) {
+            return 1;
+        }
+
+        int num = head.data + addWithCarry(head.next);
+        int digit_0 = num % 10;
+        int digit_1 = num / 10;
+        
+        head.data = digit_0;
+        return digit_1;
+    }
+}
+```
+---
+### Q14] Add two Numbers
+```java
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+
+        int carry = 0;
+        while (l1 != null || l2 != null || carry != 0) {
+            int sum = carry;
+
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+
+            carry = sum / 10;
+            curr.next = new ListNode(sum % 10);
+            curr = curr.next;
+        }
+
+        return dummy.next;
+    }
+}
+```
+---
+### Q15] Delete all occurrences of a given key in DLL
+```java
+class Solution {
+    public static Node deleteAllOccurOfX(Node head, int x) {
+        Node curr = head;
+
+        while (curr != null) {
+            if (curr.data == x) {
+                if (curr == head) {
+                    head = head.next;
+                }
+
+                if (curr.prev != null) curr.prev.next = curr.next;
+                if (curr.next != null) curr.next.prev = curr.prev;
+            } 
+            curr = curr.next;
+        }
+        return head;
+    }
+} 
+```
+---
+### Q16] Find Pairs of Given Sum in DLL
+**M: Two Pointers**
+```java
+class Solution {
+    public static ArrayList<ArrayList<Integer>> findPairsWithGivenSum(int target, Node head) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (head == null) return res;
+
+        Node left = head;
+        Node right = head;
+        while (right.next != null) {
+            right = right.next;
+        }
+
+        while (left != null && right != null && left.data < right.data) {
+            int sum = left.data + right.data;
+
+            if (sum == target) {
+                res.add(new ArrayList<>(Arrays.asList(left.data, right.data)));
+                left = left.next;
+                right = right.prev;
+            }
+            else if (sum < target) {
+                left = left.next;
+            }
+            else {
+                right = right.prev;
+            }
+        }
+
+        return res;
+    }
+}
+```
+---
