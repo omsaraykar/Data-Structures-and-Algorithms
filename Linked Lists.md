@@ -497,3 +497,77 @@ class Solution {
     }
 ```
 ---
+### Q19] Copy List with Random Pointer
+**M1: Using HashMap** **`TC: O(n), SC: O(n)`**
+```java
+class Solution {
+    public Node copyRandomList(Node head) {
+        if (head == null) return null;
+        
+        Node newHead = new Node(0);
+        Map<Node, Node> map = new HashMap<>();
+
+        Node a = head;
+        Node b = newHead;
+        while (a != null) {
+            b.next = new Node(a.val);
+            map.put(a, b.next);
+            b = b.next;
+            a = a.next;
+        }
+        newHead = newHead.next;
+        
+        a = head;
+        b = newHead;
+        while (a != null) {
+            Node random = map.get(a.random);
+            b.random = random;
+            a = a.next;
+            b = b.next;
+        }
+        
+        return newHead;
+    }
+}
+```
+**M2: 3 Pass Solution** **`TC: O(n), SC(1)`**
+```java
+class Solution {
+    public Node copyRandomList(Node head) {
+        if (head == null) return null;
+
+        // 1. Clone nodes and insert them
+        Node curr = head;
+        while (curr != null) {
+            Node copy = new Node(curr.val);
+            copy.next = curr.next;
+            curr.next = copy;
+            curr = copy.next;
+        }
+
+        // 2. Assign random pointers
+        curr = head;
+        while (curr != null) {
+            if (curr.random != null) {
+                curr.next.random = curr.random.next; // 🤓
+            }
+            curr = curr.next.next;
+        }
+
+        // 3. Separate the copied list
+        Node newHead = new Node(0);
+        Node temp = newHead;
+        curr = head;
+
+        while (curr != null) {
+            temp.next = curr.next;
+            curr.next = curr.next.next;
+
+            curr = curr.next;
+            temp = temp.next;
+        }
+
+        return newHead.next;
+    }
+}
+```
