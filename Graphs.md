@@ -566,3 +566,86 @@ class Solution {
 }
 ```
 ---
+### Q18] Course Schedule
+**M1: BFS (Kahn's Algorithm)**
+```java
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        int[] indegree = new int[numCourses];
+        for (int[] p : prerequisites) {
+            adj.get(p[1]).add(p[0]);
+            indegree[p[0]]++;
+        }
+
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) q.add(i);
+        }
+
+        int completed = 0;
+        while (!q.isEmpty()) {
+            int curr = q.poll();
+            completed++;
+
+            for (int n : adj.get(curr)) {
+                indegree[n]--;
+                if (indegree[n] == 0) {
+                    q.add(n);
+                }
+            }
+        }
+
+        return completed == numCourses;
+    }
+}
+```
+**M2: DFS**
+```java
+class Solution {  
+    public boolean canFinish(int numCourses, int[][] prerequisites) {  
+        List<List<Integer>> adj = new ArrayList<>();  
+        for (int i = 0; i < numCourses; i++) {  
+            adj.add(new ArrayList<>());  
+        }  
+  
+        for (int[] p : prerequisites) {  
+            adj.get(p[1]).add(p[0]);  
+        }  
+  
+        int[] state = new int[numCourses]; // 0 = unvisited, 1 = visiting, 2 = visited  
+  
+        for (int i = 0; i < numCourses; i++) {  
+            if (state[i] == 0) {  
+                if (dfs(i, adj, state)) {  
+                    return false; // cycle found  
+                }  
+            }  
+        }  
+  
+        return true;  
+    }  
+  
+    private boolean dfs(int node, List<List<Integer>> adj, int[] state) {  
+        state[node] = 1; // visiting  
+  
+        for (int next : adj.get(node)) {  
+            if (state[next] == 1) {  
+                return true; // cycle detected  
+            }  
+            if (state[next] == 0 && dfs(next, adj, state)) {  
+                return true;  
+            }  
+        }  
+  
+        state[node] = 2; // visited  
+        return false;  
+    }  
+}
+```
+---
+### Q19] Course Schedule II
