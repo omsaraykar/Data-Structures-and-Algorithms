@@ -393,3 +393,176 @@ class Solution {
 
 ```
 ---
+### Q7] Flood Fill
+
+---
+### Q16] Detect Cycle in Directed Graph
+**M1: DFS**
+>[!INFO] use path-visited
+```java
+class Solution {
+    public boolean isCyclic(int V, int[][] edges) {
+        // build adjacency list
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+        }
+
+        boolean[] visited = new boolean[V];
+        boolean[] pathVisited = new boolean[V];
+
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                if (dfs(i, adj, visited, pathVisited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(int node, List<List<Integer>> adj, boolean[] visited, boolean[] pathVisited) {
+        visited[node] = true;
+        pathVisited[node] = true;
+
+        for (int neighbor : adj.get(node)) {
+            if (!visited[neighbor]) {
+                if (dfs(neighbor, adj, visited, pathVisited)) {
+                    return true;
+                }
+            } else if (pathVisited[neighbor]) {
+                return true;
+            }
+        }
+
+        pathVisited[node] = false;
+        return false;
+    }
+}
+```
+**M2: Use BFS (Kahn's Algorithm)**
+```java
+class Solution {
+    public boolean isCyclic(int V, int[][] edges) {
+        List<List<Integer>> adj = new ArrayList<>();
+        int[] indegree = new int[V];
+        
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+        for (int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+            indegree[e[1]]++;
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < V; i++) {
+            if (indegree[i] == 0) q.add(i);
+        }
+        
+        int processed = 0;
+        while (!q.isEmpty()) {
+            int front = q.poll();
+            processed++;
+            for (int n: adj.get(front)) {
+                indegree[n]--;
+                if (indegree[n] == 0) q.add(n);
+            }
+        }
+        
+        return processed != V;
+    }
+}
+```
+---
+### Q17] Topological Sort
+>[!INFO] can only be applied on DAG's
+
+**M1: BFS**
+```java
+class Solution {
+    public ArrayList<Integer> topoSort(int V, int[][] edges) {
+        // build adjacency list
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+        }
+
+        boolean[] visited = new boolean[V];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfs(i, adj, visited, st);
+            }
+        }
+
+        ArrayList<Integer> res = new ArrayList<>();
+        while (!st.isEmpty()) {
+            res.add(st.pop());
+        }
+        return res;
+    }
+
+    private void dfs(int node, List<List<Integer>> adj, boolean[] visited, Stack<Integer> st) {
+        visited[node] = true;
+
+        // dfs on all unvisited neighbours
+        for (int x: adj.get(node)) {
+            if (!visited[x]) {
+                dfs(x, adj, visited, st);
+            }
+        }
+
+        st.push(node);
+    }
+}
+```
+**M2: Using BFS (Kahn's Algorithm)**
+> [!INFO] use indegree
+
+```java
+class Solution {
+    public ArrayList<Integer> topoSort(int V, int[][] edges) {
+        // build adjacency list
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+        }
+
+        boolean[] visited = new boolean[V];
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfs(i, adj, visited, st);
+            }
+        }
+
+        ArrayList<Integer> res = new ArrayList<>();
+        while (!st.isEmpty()) {
+            res.add(st.pop());
+        }
+        return res;
+    }
+
+    private void dfs(int node, List<List<Integer>> adj, boolean[] visited, Stack<Integer> st) {
+        visited[node] = true;
+
+        // dfs on all unvisited neighbours
+        for (int x: adj.get(node)) {
+            if (!visited[x]) {
+                dfs(x, adj, visited, st);
+            }
+        }
+
+        st.push(node);
+    }
+}
+```
+---
