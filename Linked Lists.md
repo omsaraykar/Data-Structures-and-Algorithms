@@ -530,7 +530,7 @@ class Solution {
     }
 }
 ```
-**M2: 3 Pass Solution** **`TC: O(n), SC(1)`**
+**M2: 3 Pass Solution `TC: O(n), SC(1)`**
 ```java
 class Solution {
     public Node copyRandomList(Node head) {
@@ -571,3 +571,77 @@ class Solution {
     }
 }
 ```
+---
+### Q20] Flatten a Linked List
+**M1: Using Array List** **`TC: O(n log(n)), SC: O(n)`**
+```java
+class Solution {
+    public Node flatten(Node root) {
+        ArrayList<Node> list = new ArrayList<>();
+        Node curr = root;
+        while (curr != null) {
+            Node temp = curr;
+            while (temp != null) {
+                list.add(temp);
+                temp = temp.bottom;
+            }
+            curr = curr.next;
+        }
+
+        list.sort(Comparator.comparingInt(n -> n.data));
+        list.add(null);
+
+        for (int i = 0; i < list.size() - 1; i++) {
+            list.get(i).bottom = list.get(i + 1);
+        }
+
+        return root;
+    }
+}
+```
+**M2: Using Recursion `TC: O(n), SC O(1)`**
+```java
+class Solution {
+    public Node flatten(Node root) {
+        if (root == null || root.next == null) {
+            return root;
+        }
+
+        root.next = flatten(root.next);
+        root = merge(root, root.next);
+
+        return root;
+    }
+    
+    private Node merge(Node a, Node b) {
+        if (a == null) return b;
+        if (b == null) return a;
+
+        if (a.data < b.data) {
+            a.bottom = merge(a.bottom, b);
+            return a;
+        } else {
+            b.bottom = merge(a, b.bottom);
+            return b;
+        }
+    }
+}
+```
+---
+### Q21] Reverse Nodes in k-Group
+```java
+class Solution {
+    public int repeatedNTimes(int[] nums) {
+        int n = nums.length;
+
+        for (int i = 0; i < n; i++) {
+            if (i + 1 < n && nums[i] == nums[i + 1]) return nums[i];
+            if (i + 2 < n && nums[i] == nums[i + 2]) return nums[i];
+            if (i + 3 < n && nums[i] == nums[i + 3]) return nums[i];
+        }
+
+        return -1;
+    }
+}
+```
+---
