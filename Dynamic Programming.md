@@ -559,3 +559,79 @@ class Solution {
 }
 ```
 ---
+### Q11]
+
+---
+### Q12]
+
+---
+### Q13] Subset Sum equal to Target
+**M1: Memoization**
+```java
+class Solution {
+    static Boolean isSubsetSum(int[] arr, int target) {
+        Boolean[][] dp = new Boolean[arr.length][target + 1];
+        return dfs(0, target, arr, dp);
+    }
+
+    private static boolean dfs(int index, int remaining, int[] arr, Boolean[][] dp) {
+        if (remaining == 0) return true;
+        if (index == arr.length || remaining < 0) return false;
+
+        if (dp[index][remaining] != null) {
+            return dp[index][remaining];
+        }
+        
+        boolean take = dfs(index + 1, remaining - arr[index], arr, dp);
+        boolean notTake = dfs(index + 1, remaining, arr, dp);
+
+        return dp[index][remaining] = take || notTake;
+    }
+}
+```
+**M2: Tabulation**
+```java
+class Solution {
+    static Boolean isSubsetSum(int[] arr, int target) {
+        int n = arr.length;
+        boolean[][] dp = new boolean[n + 1][target + 1];
+        
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+        
+        for (int i = 1; i <= n; i++) {
+            for (int sum = 1; sum <= target; sum++) {
+                boolean notTake = dp[i - 1][sum];
+                
+                boolean take = false;
+                if (sum >= arr[i - 1]) {
+                    take = dp[i - 1][sum - arr[i - 1]];
+                }
+                
+                dp[i][sum] = take || notTake;
+            }
+        }
+
+        return dp[n][target];
+    }
+}
+```
+**M3: Space Optimization**
+```java
+class Solution {
+    static Boolean isSubsetSum(int[] arr, int target) {
+        boolean[] dp = new boolean[target + 1];
+        dp[0] = true;
+       
+        for (int num : arr) {
+            for (int sum = target; sum >= num; sum--) {
+                if (dp[sum - num]) dp[sum] = true;
+            }
+        }
+
+        return dp[target];
+    }
+}
+```
+---
